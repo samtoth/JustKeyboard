@@ -15,7 +15,7 @@ void KeyboardWidget::paintEvent(QPaintEvent *e) {
     QPainter p(this);
     int w = size().width() - 1;
     int h = size().height() - 1;
-    p.setPen( QColor(0,0,0) );
+    p.setPen( QColor(255,255,255) );
     p.drawLine(0, 0, w, 0 );
     p.drawLine(0, 0, 0, h-20);
     p.drawLine(w, 0, w, h-20);
@@ -40,7 +40,7 @@ void KeyboardWidget::paintEvent(QPaintEvent *e) {
             }else if(remainderf(log2f(ratios(i)*j/5), 1.f)==0){
                 p.fillRect(cW, b, bar, (ratios(i) * h/10), QColor(168, 65, 75));
             }
-            p.setPen(QColor(0,0,0));
+            p.setPen(QColor(255,255,255));
             p.drawLine(cW, b, cW + bar, b);
             p.drawText(cW+bar - 30, b+20, toFrac(numerators[i]*j, denominators[i]));
             p.drawText(cW+bar/2-5, b+((ratios(i) * 0.5f) * h/10), QString::fromStdString(getNoteName(fundFreq * ratios(i)*j, &midiCentDiff)));
