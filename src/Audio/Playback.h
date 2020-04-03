@@ -15,6 +15,8 @@ class PlaybackEngine {
 public:
     void play();
     void stop();
+    int getDeviceCount();
+    void printDeviceInfo();
 private:
     RtAudio dac;
     void cleanup();

@@ -6,12 +6,13 @@
 #include <QDesktopWidget>
 #include "KeyboardWidget.h"
 #include <QHBoxLayout>
+#include <qdebug.h>
 
 #define A 110
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent){
-    setWindowTitle(tr("Main Window by Sam"));
+    setWindowTitle(tr("A Keyboard in Just Intonation"));
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
     QHBoxLayout *layout = new QHBoxLayout();
     KeyboardWidget *kbd1 = new KeyboardWidget(this);
@@ -23,4 +24,18 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *window = new QWidget();
     window->setLayout(layout);
     setCentralWidget(window);
+
+    audioManager = new AudioManager();
+    audioManager->moveToThread(&audioThread);
+    connect(this, &MainWindow::startAudio,
+            audioManager, &AudioManager::start);
+    connect(&audioThread, &QThread::finished, audioManager, &QObject::deleteLater);
+    audioThread.start();
+    startAudio();
 }
+
+MainWindow::~MainWindow() {
+    audioThread.quit();
+    audioThread.wait();
+}
+

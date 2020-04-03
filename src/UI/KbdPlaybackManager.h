@@ -1,0 +1,14 @@
+//
+// Created by samt on 01/04/2020.
+//
+
+#ifndef JUSTKEYBOARD_KBDPLAYBACKMANAGER_H
+#define JUSTKEYBOARD_KBDPLAYBACKMANAGER_H
+
+
+class KbdPlaybackManager {
+
+};
+
+
+#endif //JUSTKEYBOARD_KBDPLAYBACKMANAGER_H

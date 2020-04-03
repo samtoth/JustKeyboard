@@ -6,12 +6,21 @@
 #define TRADE_MAINWINDOW_H
 
 #include <QMainWindow>
+#include <Audio/AudioManager.h>
+#include <QtCore/QThread>
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    QThread audioThread;
 public:
     MainWindow(QWidget *parent = Q_NULLPTR);
+    virtual ~MainWindow();
+
+private:
+    AudioManager* audioManager;
+    signals:
+    void startAudio();
 };
 
 

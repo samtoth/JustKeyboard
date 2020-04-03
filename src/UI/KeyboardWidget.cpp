@@ -6,6 +6,7 @@
 #include "Note.h"
 #include <QPainter>
 #include <cmath>
+#include <QDebug>
 
 KeyboardWidget::KeyboardWidget(QWidget *parent) {
 
@@ -13,17 +14,16 @@ KeyboardWidget::KeyboardWidget(QWidget *parent) {
 
 void KeyboardWidget::paintEvent(QPaintEvent *e) {
     QPainter p(this);
-    int w = size().width() - 1;
-    int h = size().height() - 1;
+    int w = size().width() - 20;
+    int h = size().height() - 20;
     p.setPen( QColor(255,255,255) );
     p.drawLine(0, 0, w, 0 );
-    p.drawLine(0, 0, 0, h-20);
-    p.drawLine(w, 0, w, h-20);
-    p.drawLine(0, h-20, w, h-20);
+    p.drawLine(0, 0, 0, h);
+    p.drawLine(w, 0, w, h);
+    p.drawLine(0, h, w, h);
 
-    h = h- 20;
-    int space = w * (1/10.f)*(1/14.f);
-    int bar = w*(9/10.f)*(1/13.f);
+    space = w * (1/10.f)*(1/14.f) + 1 ;
+    bar = w*(9/10.f)*(1/13.f) + 1;
     int cW = 0;
     for(int i = 0; i<13; i++){
         cW += space;
@@ -31,17 +31,17 @@ void KeyboardWidget::paintEvent(QPaintEvent *e) {
         int b = 0;
         p.drawLine(cW, h , cW, h- ((ratios(i) * 8)*h));
         int midiCentDiff;
-        for(int j =1; j<9; j++) {
+        for(int j =1; j<12; j++) {
             b = h - ((ratios(i) * j) * h/10);
             if(remainderf(log2f(ratios(i)*j), 1.f)==0){
-                p.fillRect(cW, b, bar, (ratios(i) * h/10), QColor(45, 91, 109));
+                p.fillRect(cW+1, b, bar-1, (ratios(i) * h/10), QColor(45, 91, 109));
             }else if(remainderf(log2f(ratios(i)*j/3), 1.f)==0){
-                p.fillRect(cW, b, bar, (ratios(i) * h/10), QColor(173, 122, 67));
+                p.fillRect(cW+1, b, bar-1, (ratios(i) * h/10), QColor(173, 122, 67));
             }else if(remainderf(log2f(ratios(i)*j/5), 1.f)==0){
-                p.fillRect(cW, b, bar, (ratios(i) * h/10), QColor(168, 65, 75));
+                p.fillRect(cW+1, b, bar-1, (ratios(i) * h/10), QColor(168, 65, 75));
             }
             p.setPen(QColor(255,255,255));
-            p.drawLine(cW, b, cW + bar, b);
+            p.drawLine(cW, b, cW + bar -1, b);
             p.drawText(cW+bar - 30, b+20, toFrac(numerators[i]*j, denominators[i]));
             p.drawText(cW+bar/2-5, b+((ratios(i) * 0.5f) * h/10), QString::fromStdString(getNoteName(fundFreq * ratios(i)*j, &midiCentDiff)));
             p.drawText(cW+bar/2-5, b+((ratios(i) * 0.7f) * h/10), QString::number(midiCentDiff));
@@ -50,7 +50,7 @@ void KeyboardWidget::paintEvent(QPaintEvent *e) {
         cW += bar/2;
         p.drawText(cW -5, h+20, QString(labels[i]));
         cW += bar/2;
-        p.drawLine(cW, h, cW, h- ((ratios(i) * 8)*h+20));
+        p.drawLine(cW, h, cW, h- ((ratios(i) * 8)*(h+20)));
         p.drawLine(cW, h+20, cW, h);
     }
 
@@ -83,9 +83,23 @@ void KeyboardWidget::reduce(int *n, int *d) {
 
 void KeyboardWidget::mousePressEvent(QMouseEvent *event)
 {
+    int h = size().height() - 20;
     if (event->button() == Qt::LeftButton) {
-        //lastPoint = event->pos();
-        //scribbling = true;
+        QPoint point = event->pos();
+        int cX = 0;
+        for(int i = 0; i<13; i++) {
+            if(point.x() > cX && point.x() <= cX+space)
+                return;
+            cX += space;
+            if(point.x() > cX && point.x() <= cX+bar) {
+                //TODO: Calculate which 'string' and which 'harmonic' and relay to the playback manager
+                //ratio: ratios(i);
+
+                int height = h-point.y();
+                //Round: height/(ratios(i) * h/10);
+            }
+            cX += bar;
+        }
     }
 }
 

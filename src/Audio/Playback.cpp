@@ -61,3 +61,33 @@ void PlaybackEngine::stop() {
         error.printMessage();
     }
 }
+
+int PlaybackEngine::getDeviceCount() {
+    return dac.getDeviceCount();
+}
+
+void PlaybackEngine::printDeviceInfo() {
+    RtAudio *audioTemp = NULL;
+    audioTemp = new RtAudio();
+    unsigned int devices = audioTemp->getDeviceCount();
+    RtAudio::DeviceInfo info;
+
+    for (int i=0;i<devices;i++){
+        info = audioTemp->getDeviceInfo(i);
+        std::cout<<"default input: "<<audioTemp->getDefaultInputDevice()<<std::endl;
+        std::cout<<"default output: "<<audioTemp->getDefaultOutputDevice()<<std::endl;
+        if (info.probed ==true){
+            std::cout<<"----------------------------- Device "<<i<<" ---------------------------"<<std::endl;
+            if (info.isDefaultInput)
+                std::cout << "--Default Input"<<std::endl;
+            if (info.isDefaultOutput)
+                std::cout << "--Default Output"<<std::endl;
+            std::cout << "Name = " << info.name << '\n';
+            std::cout << "Max Input Channels = " << info.inputChannels << '\n';
+            std::cout << "Max Output Channels = " << info.outputChannels << '\n';
+            std::cout << "Max Duplex Channels = " << info.duplexChannels << '\n';
+        }
+    }
+    delete audioTemp;
+    audioTemp = NULL;
+}

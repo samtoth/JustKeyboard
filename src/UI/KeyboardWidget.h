@@ -31,6 +31,8 @@ private:
     void reduce(int *n, int *d);
     float ratios(int i);
     int fundFreq;
+    int space;
+    int bar;
 };
 
 
