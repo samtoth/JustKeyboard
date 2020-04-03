@@ -9,7 +9,7 @@
 #include <QDebug>
 
 KeyboardWidget::KeyboardWidget(QWidget *parent) {
-
+    setStyleSheet("background: #111111");
 }
 
 void KeyboardWidget::paintEvent(QPaintEvent *e) {
@@ -94,8 +94,8 @@ void KeyboardWidget::mousePressEvent(QMouseEvent *event)
             if(point.x() > cX && point.x() <= cX+bar) {
                 //TODO: Calculate which 'string' and which 'harmonic' and relay to the playback manager
                 //ratio: ratios(i);
-
-                int height = h-point.y();
+                setFreq(fundFreq*ratios(i));
+                //int height = h-point.y();
                 //Round: height/(ratios(i) * h/10);
             }
             cX += bar;
@@ -113,6 +113,6 @@ void KeyboardWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton /*&& scribbling*/) {
         //drawLineTo(event->pos());
-        //scribbling = false;
+        //setFreq(0);
     }
 }

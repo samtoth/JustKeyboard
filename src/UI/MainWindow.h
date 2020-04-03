@@ -19,7 +19,9 @@ public:
 
 private:
     AudioManager* audioManager;
-    signals:
+public slots:
+    void setFrequency(float freq);
+signals:
     void startAudio();
 };
 

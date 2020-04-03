@@ -17,6 +17,8 @@ public:
     AudioManager();
     virtual ~AudioManager();
 
+    void setPitch(float freq);
+
     void start();
     void stop();
 private:

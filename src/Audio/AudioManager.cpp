@@ -49,3 +49,7 @@ void AudioManager::start() {
 void AudioManager::stop() {
     audio->stop();
 }
+
+void AudioManager::setPitch(float freq) {
+    audioIO->setFreq(freq);
+}

@@ -9,7 +9,7 @@ QRTAudioIO::QRTAudioIO(QObject *parent):
 {
     sine = new stk::SineWave;
 
-    sine->setFrequency(440.0);
+    sine->setFrequency(0);
 }
 
 bool QRTAudioIO::open(QIODevice::OpenMode mode) {
@@ -28,7 +28,7 @@ qint64 QRTAudioIO::readData(char *data, qint64 maxSize) {
     float *samples = (float *) data;
     int nSamples =((int)maxSize)/(SAMPLE_SIZE);
     for (int i = 0; i < nSamples;i++) {
-        *samples++ = (float) sine->tick();
+        *samples++ = (float) (frequency==0?0:sine->tick());
     }
 
     return maxSize;
@@ -40,4 +40,9 @@ qint64 QRTAudioIO::writeData(const char *data, qint64 maxSize) {
 
 QRTAudioIO::~QRTAudioIO() {
     delete sine;
+}
+
+void QRTAudioIO::setFreq(float freq) {
+    frequency = freq;
+    sine->setFrequency(freq);
 }
