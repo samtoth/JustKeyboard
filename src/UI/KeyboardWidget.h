@@ -27,6 +27,7 @@ protected:
     int numerators[13] = {5,6,4,3,4,2,1,3,5,5,7,7,7};
     int denominators[13]={7,7,7,5,5,3,1,2,4,3,4,6,5};
 private:
+    bool getStringAndFreq(int *string, float *frequency, QPoint point);
     QString toFrac(int n, int d);
     void reduce(int *n, int *d);
     float ratios(int i);
@@ -34,7 +35,7 @@ private:
     int space;
     int bar;
 signals:
-    void setFreq(float freq);
+    void setFreq(int string, float freq);
 };
 
 

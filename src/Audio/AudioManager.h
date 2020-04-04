@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QAudioOutput>
 #include <QThread>
+#include "StringAudioGen.h"
 
 class AudioManager : public QObject{
     Q_OBJECT
@@ -17,15 +18,19 @@ public:
     AudioManager();
     virtual ~AudioManager();
 
-    void setPitch(float freq);
+    void setStringPitch(int string, float freq);
 
     void start();
     void stop();
 private:
     bool configureAudioOutput();
 
+    StringAudioGen* strings[13];
+
     QRTAudioIO *audioIO;
-    QAudioOutput* audio; // class member.
+    QAudioOutput* audioOutput; // class member.
+public slots:
+    float tick();
 };
 
 

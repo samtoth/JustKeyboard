@@ -7,7 +7,6 @@
 
 #include <QAudio>
 #include <QIODevice>
-#include "../../thirdparty/stk/include/SineWave.h"
 
 
 #define SAMPLE_SIZE sizeof(float)
@@ -19,18 +18,16 @@ public:
     explicit QRTAudioIO(QObject* parent = 0);
     virtual ~QRTAudioIO();
 
-    bool open(OpenMode mode);
-    void close();
-    bool isSequential() const;
-
-    void setFreq(float freq);
+    bool open(OpenMode mode) override;
+    void close() override;
+    bool isSequential() const override;
 protected:
-    qint64 readData(char* data, qint64 maxSize);
-    qint64 writeData(const char* data, qint64 maxSize);
+    qint64 readData(char* data, qint64 maxSize) override;
+    qint64 writeData(const char* data, qint64 maxSize) override;
 private:
-    stk::SineWave* sine;
-    float frequency;
     Q_DISABLE_COPY(QRTAudioIO)
+signals:
+    float tick();
 };
 
 

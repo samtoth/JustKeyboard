@@ -20,7 +20,7 @@ public:
 private:
     AudioManager* audioManager;
 public slots:
-    void setFrequency(float freq);
+    void setFrequency(int string, float freq);
 signals:
     void startAudio();
 };

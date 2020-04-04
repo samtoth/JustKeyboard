@@ -8,8 +8,13 @@ AudioManager::AudioManager(){
 }
 
 AudioManager::~AudioManager() {
-    audio->stop();
-    delete audio;
+    audioOutput->stop();
+
+    for(int i = 0; i<13; i++){
+        delete strings[i];
+    }
+
+    delete audioOutput;
     delete audioIO;
     qDebug() << "Audio manager safely cleaned up";
 }
@@ -33,23 +38,37 @@ bool AudioManager::configureAudioOutput() {
 
     //qDebug() << "Audio format: " << format.bytesPerFrame() << " bytes per frame";
 
-    audio = new QAudioOutput(format, NULL);
+    audioOutput = new QAudioOutput(format, NULL);
     return true;
 }
 
 void AudioManager::start() {
     if (configureAudioOutput()) {
-    audioIO = new QRTAudioIO;
-    audioIO->open(QIODevice::ReadOnly);
-    audio->start(audioIO);
-    qDebug() << "Audio manager started";
+        audioIO = new QRTAudioIO;
+        audioIO->open(QIODevice::ReadOnly);
+        for(int i = 0; i < 13; i++){
+            strings[i] = new StringAudioGen();
+        }
+        connect(audioIO, &QRTAudioIO::tick, this, &AudioManager::tick);
+        audioOutput->start(audioIO);
+        qDebug() << "Audio manager started";
     }
 }
 
 void AudioManager::stop() {
-    audio->stop();
+    audioOutput->stop();
 }
 
-void AudioManager::setPitch(float freq) {
-    audioIO->setFreq(freq);
+void AudioManager::setStringPitch(int string, float freq) {
+    strings[string]->setFrequency(freq);
 }
+
+float AudioManager::tick() {
+    float result = 0;
+    for(int i =0; i<13; i++){
+        result += strings[i]->tick();
+    }
+    return result/13.f;
+}
+
+

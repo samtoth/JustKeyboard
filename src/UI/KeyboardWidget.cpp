@@ -83,30 +83,28 @@ void KeyboardWidget::reduce(int *n, int *d) {
 
 void KeyboardWidget::mousePressEvent(QMouseEvent *event)
 {
-    int h = size().height() - 20;
+    if (event->button() == Qt::RightButton) {
+        int n = 0;
+        float f = 0.f;
+        getStringAndFreq(&n, &f, event->pos());
+        setFreq(n, 0);
+    }
     if (event->button() == Qt::LeftButton) {
-        QPoint point = event->pos();
-        int cX = 0;
-        for(int i = 0; i<13; i++) {
-            if(point.x() > cX && point.x() <= cX+space)
-                return;
-            cX += space;
-            if(point.x() > cX && point.x() <= cX+bar) {
-                //TODO: Calculate which 'string' and which 'harmonic' and relay to the playback manager
-                //ratio: ratios(i);
-                setFreq(fundFreq*ratios(i));
-                //int height = h-point.y();
-                //Round: height/(ratios(i) * h/10);
-            }
-            cX += bar;
-        }
+        int n = 0;
+        float f = 0.f;
+        getStringAndFreq(&n, &f, event->pos());
+        setFreq(n, f);
     }
 }
 
 void KeyboardWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    //if ((event->buttons() & Qt::LeftButton) && scribbling)
-        //drawLineTo(event->pos());
+    if (event->buttons() == Qt::LeftButton) {
+        int n = 0;
+        float f = 0.f;
+        getStringAndFreq(&n, &f, event->pos());
+        setFreq(n, f);
+    }
 }
 
 void KeyboardWidget::mouseReleaseEvent(QMouseEvent *event)
@@ -115,4 +113,24 @@ void KeyboardWidget::mouseReleaseEvent(QMouseEvent *event)
         //drawLineTo(event->pos());
         //setFreq(0);
     }
+}
+
+bool KeyboardWidget::getStringAndFreq(int *string, float *frequency, QPoint point) {
+    int h = size().height() - 20;
+    int cX = 0;
+    for(int i = 0; i<13; i++) {
+        if(point.x() > cX && point.x() <= cX+space)
+            return false;
+        cX += space;
+        if(point.x() > cX && point.x() <= cX+bar) {
+            int height = h-point.y();
+            int n = ceilf(height/(float)(ratios(i) * h/10));
+
+            *string = i;
+            *frequency = fundFreq*ratios(i)*n;
+            return true;
+        }
+        cX += bar;
+    }
+    return false;
 }

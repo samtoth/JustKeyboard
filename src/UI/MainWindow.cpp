@@ -14,9 +14,15 @@ MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent){
     setWindowTitle(tr("A Keyboard in Just Intonation"));
     resize(QDesktopWidget().availableGeometry(this).size() * 0.7);
+
+    QPalette pal = QPalette();
+
+    pal.setColor(QPalette::Window, QColor(0x141a21));
+
+
     QHBoxLayout *layout = new QHBoxLayout();
     KeyboardWidget *kbd1 = new KeyboardWidget(this);
-    kbd1->setFundFreq(A*3/2);
+    kbd1->setFundFreq(A);
     KeyboardWidget *kbd2 = new KeyboardWidget(this);
     kbd2->setFundFreq(A*5 *0.25f);
     layout->addWidget(kbd1);
@@ -24,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *window = new QWidget();
     window->setLayout(layout);
     setCentralWidget(window);
+
+    window->setAutoFillBackground(true);
+    window->setPalette(pal);
 
     connect(kbd1, &KeyboardWidget::setFreq, this, &MainWindow::setFrequency);
 
@@ -41,7 +50,7 @@ MainWindow::~MainWindow() {
     audioThread.wait();
 }
 
-void MainWindow::setFrequency(float freq) {
-    audioManager->setPitch(freq);
+void MainWindow::setFrequency(int string, float freq) {
+    audioManager->setStringPitch(string, freq);
 }
 
