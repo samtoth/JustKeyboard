@@ -6,6 +6,9 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
+    a.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,false);
+    a.setAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents, true);
+
     MainWindow w;
     w.show();
     w.setWindowState(Qt::WindowMaximized);

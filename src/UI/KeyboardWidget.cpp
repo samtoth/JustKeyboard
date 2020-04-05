@@ -8,6 +8,7 @@
 #include <cmath>
 #include <QDebug>
 #include <QtCore/QTime>
+#include <QtCore/QTimer>
 
 KeyboardWidget::KeyboardWidget(QWidget *parent) {
     setStyleSheet("background: #111111");
@@ -84,31 +85,6 @@ void KeyboardWidget::reduce(int *n, int *d) {
     return;
 }
 
-void KeyboardWidget::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton) {
-        int n = 0;
-        float f = 0.f;
-        getStringAndFreq(&n, &f, event->pos());
-        setFreq(n, f);
-    }
-}
-
-void KeyboardWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    if (event->buttons() == Qt::LeftButton) {
-        int n = 0;
-        float f = 0.f;
-        getStringAndFreq(&n, &f, event->pos());
-        setFreq(n, f);
-    }
-}
-
-void KeyboardWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-    if(!shift){kill();}
-}
-
 void KeyboardWidget::kill() {
     for(int i=0; i < 13; i++){
         this->setFreq(i, 0);
@@ -118,31 +94,31 @@ void KeyboardWidget::kill() {
 
 bool KeyboardWidget::event(QEvent *event){
     switch (event->type()) {
-        case QEvent::TouchBegin: {
-            return true;
-        }
-        case QEvent::TouchUpdate: {
+        case QEvent::TouchBegin:
+        case QEvent::TouchUpdate:
+        case QEvent::TouchEnd:
+        {
             QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
-            if(!shift){kill();}
+            float stringFreq[13] = {0};
             foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
-                if(touchPoint.state()!=Qt::TouchPointReleased) {
+                if (touchPoint.state() != Qt::TouchPointReleased) {
                     int n = 0;
                     float f = 0.f;
                     getStringAndFreq(&n, &f, touchPoint.pos());
-                    setFreq(n, f);
+                    stringFreq[n] = f;
                     continue;
                 }
             }
-            return true;
-        }
-        case QEvent::TouchEnd: {
+            for (int i = 0; i < 13; i++) {
+                setFreq(i, stringFreq[i]);
+            }
             return true;
         }
         case QEvent::KeyRelease:
         case QEvent::KeyPress: {
             shift = static_cast<QKeyEvent *>(event)->modifiers() == Qt::ShiftModifier;
             if(!shift){kill();}
-            break;
+            return false;
         }
         default:
             return QWidget::event(event);

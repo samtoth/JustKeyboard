@@ -6,8 +6,7 @@
 
 QRTAudioIO::QRTAudioIO(QObject *parent):
         QIODevice(parent)
-{
-}
+{}
 
 bool QRTAudioIO::open(QIODevice::OpenMode mode) {
     setOpenMode(mode);
@@ -36,5 +35,5 @@ qint64 QRTAudioIO::writeData(const char *data, qint64 maxSize) {
     return 0;
 }
 
-QRTAudioIO::~QRTAudioIO() {
-}
+QRTAudioIO::~QRTAudioIO() {}
+

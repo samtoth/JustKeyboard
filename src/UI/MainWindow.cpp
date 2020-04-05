@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
             audioManager, &AudioManager::start);
     connect(&audioThread, &QThread::finished, audioManager, &QObject::deleteLater);
     audioThread.start();
+    audioThread.setPriority(QThread::TimeCriticalPriority);
     startAudio();
 }
 

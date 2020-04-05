@@ -23,12 +23,13 @@ AudioManager::~AudioManager() {
 bool AudioManager::configureAudioOutput() {
     QAudioFormat format;
     // Set up the format, eg.
-    format.setSampleRate(44100.0);
+    format.setSampleRate(SAMPLE_RATE);
     format.setChannelCount(1);
     format.setSampleSize(SAMPLE_SIZE*8);
     format.setCodec("audio/pcm");
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::Float);
+
 
     QAudioDeviceInfo info(QAudioDeviceInfo::defaultOutputDevice());
     if (!info.isFormatSupported(format)) {
@@ -39,6 +40,7 @@ bool AudioManager::configureAudioOutput() {
     //qDebug() << "Audio format: " << format.bytesPerFrame() << " bytes per frame";
 
     audioOutput = new QAudioOutput(format, NULL);
+    audioOutput->setBufferSize(SAMPLE_SIZE * SAMPLE_RATE * 0.03f);
     return true;
 }
 
@@ -60,7 +62,9 @@ void AudioManager::stop() {
 }
 
 void AudioManager::setStringPitch(int string, float freq) {
-    strings[string]->setFrequency(freq);
+    if(strings[string]->getFrequency()!=freq) {
+        strings[string]->setFrequency(freq);
+    }
 }
 
 float AudioManager::tick() {

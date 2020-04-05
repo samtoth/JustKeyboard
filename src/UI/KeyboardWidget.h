@@ -20,9 +20,6 @@ public:
     void kill();
 protected:
     void paintEvent( QPaintEvent *e );
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
     bool event(QEvent *event) override;
 
     QString labels[13] = {"5/7", "6/7", "4/7", "3/5", "4/5", "2/3", "1", "3/2", "5/4", "5/3", "7/4", "7/6", "7/5"};
