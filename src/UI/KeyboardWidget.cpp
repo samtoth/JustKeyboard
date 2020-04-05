@@ -7,9 +7,12 @@
 #include <QPainter>
 #include <cmath>
 #include <QDebug>
+#include <QtCore/QTime>
 
 KeyboardWidget::KeyboardWidget(QWidget *parent) {
     setStyleSheet("background: #111111");
+    setFocusPolicy(Qt::StrongFocus);
+    setAttribute(Qt::WA_AcceptTouchEvents);
 }
 
 void KeyboardWidget::paintEvent(QPaintEvent *e) {
@@ -83,12 +86,6 @@ void KeyboardWidget::reduce(int *n, int *d) {
 
 void KeyboardWidget::mousePressEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::RightButton) {
-        int n = 0;
-        float f = 0.f;
-        getStringAndFreq(&n, &f, event->pos());
-        setFreq(n, 0);
-    }
     if (event->button() == Qt::LeftButton) {
         int n = 0;
         float f = 0.f;
@@ -109,13 +106,50 @@ void KeyboardWidget::mouseMoveEvent(QMouseEvent *event)
 
 void KeyboardWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    if (event->button() == Qt::LeftButton /*&& scribbling*/) {
-        //drawLineTo(event->pos());
-        //setFreq(0);
+    if(!shift){kill();}
+}
+
+void KeyboardWidget::kill() {
+    for(int i=0; i < 13; i++){
+        this->setFreq(i, 0);
     }
 }
 
-bool KeyboardWidget::getStringAndFreq(int *string, float *frequency, QPoint point) {
+
+bool KeyboardWidget::event(QEvent *event){
+    switch (event->type()) {
+        case QEvent::TouchBegin: {
+            return true;
+        }
+        case QEvent::TouchUpdate: {
+            QList<QTouchEvent::TouchPoint> touchPoints = static_cast<QTouchEvent *>(event)->touchPoints();
+            if(!shift){kill();}
+            foreach (const QTouchEvent::TouchPoint &touchPoint, touchPoints) {
+                if(touchPoint.state()!=Qt::TouchPointReleased) {
+                    int n = 0;
+                    float f = 0.f;
+                    getStringAndFreq(&n, &f, touchPoint.pos());
+                    setFreq(n, f);
+                    continue;
+                }
+            }
+            return true;
+        }
+        case QEvent::TouchEnd: {
+            return true;
+        }
+        case QEvent::KeyRelease:
+        case QEvent::KeyPress: {
+            shift = static_cast<QKeyEvent *>(event)->modifiers() == Qt::ShiftModifier;
+            if(!shift){kill();}
+            break;
+        }
+        default:
+            return QWidget::event(event);
+    }
+}
+
+bool KeyboardWidget::getStringAndFreq(int *string, float *frequency, QPointF point) {
     int h = size().height() - 20;
     int cX = 0;
     for(int i = 0; i<13; i++) {
