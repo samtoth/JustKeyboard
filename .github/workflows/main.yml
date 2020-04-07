@@ -7,6 +7,8 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v1
+    - name: get-cmake
+      uses: lukka/get-cmake@v2.3
     - name: Install Qt
       uses: jurplel/install-qt-action@v2.5.3
     - name: configure
