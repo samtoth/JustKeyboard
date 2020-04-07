@@ -16,8 +16,8 @@ jobs:
     - name: get-cmake
       uses: lukka/get-cmake@v2.3
       
-    - name: Install Qt Multimedia
-      run: sudo apt-get install libasound2-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+    - name: Install Qt Multimedia deps
+      run: sudo apt-get update && sudo apt-get install libasound2-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v2.5.3
