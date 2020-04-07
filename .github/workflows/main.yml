@@ -12,13 +12,17 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v1
+      
     - name: get-cmake
       uses: lukka/get-cmake@v2.3
+      
     - name: Install Qt
       uses: jurplel/install-qt-action@v2.5.3
-    - name: configure
-      run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_FLAGS="-Werror" ..
-    - name: build
+      
+    - name: Configure
+      run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER="usr/bin/g++" -DCMAKE_CXX_FLAGS="-Werror" -DCMAKE_C_COMPILER="usr/bin/gcc" ..
+      
+    - name: Build
       run: cmake --build build --target all -- -j 4
       
   windows:
@@ -35,9 +39,9 @@ jobs:
       
     - name: Configure
       shell: cmd
-      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 16 2019" ..
+      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G"MinGW Makefiles" ..
 
-    - name: Compile
+    - name: Build
       working-directory: build
       shell: cmd
       run: cmake --build . --config Release -j 4
