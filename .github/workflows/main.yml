@@ -20,8 +20,8 @@ jobs:
       uses: jurplel/install-qt-action@v2.5.3
       
     - name: Configure
-      run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER="usr/bin/g++" -DCMAKE_CXX_FLAGS="-Werror" -DCMAKE_C_COMPILER="usr/bin/gcc" ..
-      
+      run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DCMAKE_CXX_FLAGS="-Werror" -DCMAKE_C_COMPILER="/usr/bin/gcc" ..
+  
     - name: Build
       run: cmake --build build --target all -- -j 4
       
@@ -39,7 +39,7 @@ jobs:
       
     - name: Configure
       shell: cmd
-      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G"MinGW Makefiles" ..
+      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 16 2019" ..
 
     - name: Build
       working-directory: build
