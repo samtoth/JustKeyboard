@@ -37,3 +37,8 @@ qint64 QRTAudioIO::writeData(const char *data, qint64 maxSize) {
 
 QRTAudioIO::~QRTAudioIO() {}
 
+bool QRTAudioIO::seek(qint64 pos) {
+    //qWarning("QIODevice::seek: Cannot call seek on a sequential device");
+    return false;
+}
+

@@ -4,16 +4,18 @@
 
 #include "StringAudioGen.h"
 
-StringAudioGen::StringAudioGen() {
-    sine = new stk::SineWave();
-    sine->setFrequency(0);
+StringAudioGen::StringAudioGen(float fundF, int sampleR) {
+    fundamentalF = fundF;
+    string = new stk::Bowed(fundamentalF);
+    string->setSampleRate(sampleR);
+    string->setVibrato(0.005);
 }
 
 StringAudioGen::~StringAudioGen() {
-    delete sine;
+    delete string;
 }
 
 float StringAudioGen::tick() {
-    return (float)sine->tick();
+    return (float)string->tick();
 }
 

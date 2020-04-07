@@ -8,6 +8,13 @@
 #include <QMainWindow>
 #include <Audio/AudioManager.h>
 #include <QtCore/QThread>
+#include <QDesktopWidget>
+#include "KeyboardWidget.h"
+#include <QHBoxLayout>
+#include <qdebug.h>
+#include <QMenuBar>
+
+#define A 110
 
 class MainWindow : public QMainWindow
 {
@@ -19,8 +26,10 @@ public:
 
 private:
     AudioManager* audioManager;
-public slots:
-    void setFrequency(int string, float freq);
+    QMenu* audioMenu;
+    QMenu* helpMenu;
+    QAction* aboutAc;
+    void setupMenuBar();
 signals:
     void startAudio();
 };

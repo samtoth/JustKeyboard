@@ -7,9 +7,7 @@
 
 
 #include "QRTAudioIO.h"
-#include <QDebug>
 #include <QAudioOutput>
-#include <QThread>
 #include "StringAudioGen.h"
 
 class AudioManager : public QObject{

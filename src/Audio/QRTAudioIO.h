@@ -7,7 +7,6 @@
 
 #include <QAudio>
 #include <QIODevice>
-#include "../../thirdparty/stk/include/SineWave.h"
 
 
 #define SAMPLE_SIZE sizeof(float)
@@ -22,9 +21,9 @@ public:
     bool open(OpenMode mode) override;
     void close() override;
     bool isSequential() const override;
+    bool seek(qint64 pos) override;
 
 
-    stk::SineWave* wave;
 protected:
     qint64 readData(char* data, qint64 maxSize) override;
     qint64 writeData(const char* data, qint64 maxSize) override;

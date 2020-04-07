@@ -7,6 +7,7 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+#include <QPainter>
 
 class KeyboardWidget : public QWidget{
 Q_OBJECT
@@ -19,17 +20,14 @@ public:
 
     void kill();
 protected:
-    void paintEvent( QPaintEvent *e );
+    void paintEvent( QPaintEvent *e ) override;
     bool event(QEvent *event) override;
 
-    QString labels[13] = {"5/7", "6/7", "4/7", "3/5", "4/5", "2/3", "1", "3/2", "5/4", "5/3", "7/4", "7/6", "7/5"};
-    int numerators[13] = {5,6,4,3,4,2,1,3,5,5,7,7,7};
-    int denominators[13]={7,7,7,5,5,3,1,2,4,3,4,6,5};
+
 private:
     bool getStringAndFreq(int *string, float *frequency, QPointF point);
     QString toFrac(int n, int d);
     void reduce(int *n, int *d);
-    float ratios(int i);
     int fundFreq;
     int space;
     int bar;

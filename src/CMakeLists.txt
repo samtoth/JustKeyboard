@@ -6,7 +6,6 @@ set(CMAKE_AUTOMOC ON)
 
 #add_subdirectory(Audio)
 
-include_directories(thirdparty)
 
-add_executable(JustKeyboard main.cpp UI/MainWindow.cpp UI/KeyboardWidget.cpp UI/KeyboardWidget.h Note.h Audio/QRTAudioIO.cpp Audio/QRTAudioIO.h Audio/AudioManager.cpp Audio/AudioManager.h Audio/StringAudioGen.cpp Audio/StringAudioGen.h)
+add_executable(JustKeyboard main.cpp UI/MainWindow.cpp UI/KeyboardWidget.cpp UI/KeyboardWidget.h Note.h Audio/QRTAudioIO.cpp Audio/QRTAudioIO.h Audio/AudioManager.cpp Audio/AudioManager.h Audio/StringAudioGen.cpp Audio/StringAudioGen.h Ratios.h)
 target_link_libraries(JustKeyboard PUBLIC Qt5::Widgets Qt5::Multimedia STK)

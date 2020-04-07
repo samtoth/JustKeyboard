@@ -7,23 +7,33 @@
 
 
 #include <QObject>
-#include "../../thirdparty/stk/include/SineWave.h"
+#include <stk/include/Bowed.h>
 
 class StringAudioGen : public QObject {
     Q_OBJECT
 public:
-    StringAudioGen();
+    StringAudioGen(float fundF, int sampleR);
 
     virtual ~StringAudioGen();
 
     float tick();
 
     float getFrequency() const {return frequency;}
-    void setFrequency(float frequency) {StringAudioGen::frequency = frequency; sine->setFrequency(frequency);}
+    void setFrequency(float freq) {
+        if(freq!=frequency) {
+            if(freq == 0){
+                string->noteOff(0.99);
+            }else{
+                string->noteOn(freq, 1./8);
+            }
+            frequency = freq;
+        }
+    }
 
 private:
+    float fundamentalF;
     float frequency;
-    stk::SineWave* sine;
+    stk::Bowed* string;
 };
 
 

@@ -3,6 +3,9 @@
 //
 
 #include "AudioManager.h"
+#include <QDebug>
+#include <QThread>
+#include <Ratios.h>
 
 AudioManager::AudioManager(){
 }
@@ -40,7 +43,7 @@ bool AudioManager::configureAudioOutput() {
     //qDebug() << "Audio format: " << format.bytesPerFrame() << " bytes per frame";
 
     audioOutput = new QAudioOutput(format, NULL);
-    audioOutput->setBufferSize(SAMPLE_SIZE * SAMPLE_RATE * 0.03f);
+    audioOutput->setBufferSize(SAMPLE_SIZE * SAMPLE_RATE * 0.25f);
     return true;
 }
 
@@ -49,7 +52,7 @@ void AudioManager::start() {
         audioIO = new QRTAudioIO;
         audioIO->open(QIODevice::ReadOnly);
         for(int i = 0; i < 13; i++){
-            strings[i] = new StringAudioGen();
+            strings[i] = new StringAudioGen(RATIOS::ratios(i), SAMPLE_RATE);
         }
         connect(audioIO, &QRTAudioIO::tick, this, &AudioManager::tick);
         audioOutput->start(audioIO);
@@ -62,9 +65,7 @@ void AudioManager::stop() {
 }
 
 void AudioManager::setStringPitch(int string, float freq) {
-    if(strings[string]->getFrequency()!=freq) {
-        strings[string]->setFrequency(freq);
-    }
+    strings[string]->setFrequency(freq);
 }
 
 float AudioManager::tick() {
@@ -72,7 +73,7 @@ float AudioManager::tick() {
     for(int i =0; i<13; i++){
         result += strings[i]->tick();
     }
-    return result/13.f;
+    return result;
 }
 
 

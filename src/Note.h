@@ -12,11 +12,11 @@
 #define SSTR( x ) static_cast< std::ostringstream & >( \
         ( std::ostringstream() << std::dec << x ) ).str()
 
-const char Notes[12][3] = { "C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B" };
+inline const char Notes[12][3] = { "C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B" };
 
-std::string getNoteName(int freq, int *midiCentDiff) {
+inline std::string getNoteName(float freq, int *midiCentDiff) {
     int a = 440; //frequency of A (common value is 440Hz)
-    float midic = (12 * std::log2((float)freq /(float)a)) + 69; //A4 is midi 69
+    float midic = (12 * std::log2(freq /(float)a)) + 69; //A4 is midi 69
     *midiCentDiff = roundf((-roundf(midic)+midic)*100);
     int midi = round(midic);
     int octave = (midi / 12) - 1;
