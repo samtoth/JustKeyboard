@@ -12,6 +12,6 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v2.5.3
     - name: configure
-      run: mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-Werror" ..
+      run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_CC_COMPILER=gcc -DCMAKE_CXX_FLAGS="-Werror" ..
     - name: build
       run: cmake --build build
