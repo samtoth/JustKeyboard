@@ -2,14 +2,48 @@ name: Build
 
 on: [push]
 
+env:
+  VCINSTALLDIR: C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/
+  Qt5_DIR: Qt\5.13.1\msvc2017_64\lib\cmake\Qt5\
+  QTDIR: Qt\5.13.1\msvc2017_64\
+
 jobs:
-  build:
+  linux:
     runs-on: [ubuntu-latest]
     steps:
     - uses: actions/checkout@v1
+      
+    - name: get-cmake
+      uses: lukka/get-cmake@v2.3
+      
     - name: Install Qt
       uses: jurplel/install-qt-action@v2.5.3
-    - name: configure
-      run: mkdir build && cd build && cmake -DCMAKE_CXX_FLAGS="-Werror" ..
-    - name: build
-      run: cmake --build build
+      
+    - name: Configure
+      run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DCMAKE_CXX_FLAGS="-Werror" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_PREFIX_PATH="/home/runner/work/JustKeyboard/Qt 5.12.7" ..
+  
+    - name: Build
+      run: cmake --build build --target all -- -j 4
+      
+  windows:
+    timeout-minutes: 15
+    runs-on: windows-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2.5.3
+      
+    - name: Configure
+      shell: cmd
+      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 16 2019" ..
+
+    - name: Build
+      working-directory: build
+      shell: cmd
+      run: cmake --build . --config Release -j 4
+      
+  
