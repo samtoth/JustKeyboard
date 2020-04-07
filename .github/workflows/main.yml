@@ -2,10 +2,6 @@ name: Build
 
 on: [push]
 
-env:
-  VCINSTALLDIR: C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/
-  Qt5_DIR: Qt\5.13.1\msvc2017_64\lib\cmake\Qt5\
-  QTDIR: Qt\5.13.1\msvc2017_64\
 
 jobs:
   linux:
@@ -16,8 +12,8 @@ jobs:
     - name: get-cmake
       uses: lukka/get-cmake@v2.3
       
-    - name: Install Qt Multimedia deps
-      run: sudo apt-get update && sudo apt-get install libasound2-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
+    #- name: Install Qt Multimedia deps
+    #  run: sudo apt-get update && sudo apt-get install libasound2-dev libgstreamer0.10-dev libgstreamer-plugins-base0.10-dev
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v2.5.3
@@ -29,26 +25,4 @@ jobs:
   
     - name: Build
       run: cmake --build build --target all -- -j 4
-      
-  windows:
-    timeout-minutes: 15
-    runs-on: windows-latest
-
-    steps:
-
-    - name: Checkout
-      uses: actions/checkout@v1
-
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v2.5.3
-      
-    - name: Configure
-      shell: cmd
-      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -G"Visual Studio 16 2019" ..
-
-    - name: Build
-      working-directory: build
-      shell: cmd
-      run: cmake --build . --config Release -j 4
-      
-  
+    
