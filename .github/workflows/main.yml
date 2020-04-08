@@ -26,4 +26,19 @@ jobs:
   
     - name: Build
       run: cmake --build build --target all -- -j 4
-    
+  windows:
+    runs-on: [windows-latest]
+    steps: 
+      - uses: actions/checkout@v1
+      
+      - name: get-cmake
+        uses: lukka/get-cmake@v2.3
+        
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.5.3
+      
+      - name: Configure
+        run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_PREFIX_PATH="/home/runner/work/JustKeyboard/Qt 5.12.7" ..
+  
+      - name: Build
+        run: cmake --build build --target all -- -j 4
