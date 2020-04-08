@@ -36,9 +36,12 @@ jobs:
         
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.5.3
+        with:
+          dir: ${{ github.workspace }}
+          arch: win64_mingw73
       
       - name: Configure
-        run: mkdir build && cd build && cmake -DCMAKE_CXX_COMPILER="/usr/bin/g++" -DCMAKE_C_COMPILER="/usr/bin/gcc" -DCMAKE_PREFIX_PATH="/home/runner/work/JustKeyboard/Qt 5.12.7" ..
+        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_C_COMPILER=${{ github.workspace }}/Qt/Tools/mingw730_64/bin/gcc.exe -DCMAKE_CXX_COMPILER=${{ github.workspace }}/Qt/Tools/mingw730_64/bin/g++.exe -G "CodeBlocks - MinGW Makefiles" ..
   
       - name: Build
         run: cmake --build build --target all -- -j 4
