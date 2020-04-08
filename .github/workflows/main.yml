@@ -40,7 +40,7 @@ jobs:
           arch: win64_mingw73
       
       - name: Configure
-        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_C_COMPILER="${Qt5_Dir}/bin/gcc.exe" -DCMAKE_CXX_COMPILER="%{Qt5_Dir}/bin/g++.exe" -G "CodeBlocks - MinGW Makefiles" ..
+        run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=release -DCMAKE_C_COMPILER="%Qt5_Dir%/bin/gcc.exe" -DCMAKE_CXX_COMPILER="%Qt5_Dir%/bin/g++.exe" -G "CodeBlocks - MinGW Makefiles" ..
   
       - name: Build
         run: cmake --build build --target all -- -j 4
